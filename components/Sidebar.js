@@ -1,6 +1,11 @@
 import Image from "next/image"
+import useFoodtruck from "../hooks/useFoodtruck"
+import Categoria from "./Categoria"
 
 const Sidebar = () => {
+
+    const { categorias } = useFoodtruck()
+
   return (
     <>
         <Image 
@@ -10,7 +15,14 @@ const Sidebar = () => {
             alt="imagen logotipo"
         />
 
-        
+        <nav className="mt-10">
+            {categorias.map( categoria => (
+                <Categoria 
+                    key={categoria.id}
+                    categoria={categoria}
+                />
+            ))}
+        </nav>
     </>
   )
 }
