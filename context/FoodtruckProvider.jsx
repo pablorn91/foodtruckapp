@@ -26,7 +26,7 @@ const FoodtruckProvider = ({children}) => {
     }, [])
 
     useEffect(() => {
-        setCategoriaActual(categorias[1])
+        setCategoriaActual(categorias[0])
     }, [categorias])
 
     useEffect(() => {
@@ -78,7 +78,26 @@ const FoodtruckProvider = ({children}) => {
 
     const colocarOrden = async e => {
         e.preventDefault()
-        console.log('enviando orden...')
+
+        try {
+           await axios.post('/api/ordenes',{pedido, nombre, total, fecha: Date.now().toString()})
+           
+           //Resetear la app
+           setCategoriaActual(categorias[0])
+           setPedido([])
+           setNombre('')
+           setTotal(0)
+
+           toast.success('Pedido Realizado Correctamente')
+
+           setTimeout(() => {
+                router.push('/')
+           }, 3000);
+
+        } catch (error) {
+            console.log(error)
+        }
+        
     }
 
 
