@@ -11,6 +11,8 @@ const FoodtruckProvider = ({children}) => {
     const [ producto, setProducto ] = useState({})
     const [ modal, setModal ] = useState(false)
     const [ pedido, setPedido ] = useState([])
+    const [ nombre, setNombre ] = useState('')
+    const [ total, setTotal ] = useState(0)
 
     const router = useRouter()
 
@@ -26,6 +28,11 @@ const FoodtruckProvider = ({children}) => {
     useEffect(() => {
         setCategoriaActual(categorias[1])
     }, [categorias])
+
+    useEffect(() => {
+        const nuevoTotal = pedido.reduce((total,producto) => (producto.precio * producto.cantidad) + total, 0)
+        setTotal(nuevoTotal)
+    }, [pedido])
 
     const handleClickCategoria = id => {
         const categoria = categorias.filter( cat => cat.id === id)
@@ -69,6 +76,12 @@ const FoodtruckProvider = ({children}) => {
         setPedido(pedidoActualizado)
     }
 
+    const colocarOrden = async e => {
+        e.preventDefault()
+        console.log('enviando orden...')
+    }
+
+
     return (
 
         <FoodtruckContext.Provider
@@ -83,7 +96,11 @@ const FoodtruckProvider = ({children}) => {
                 handleAgregarPedido,
                 pedido,
                 handleEditarCantidades,
-                handleEliminarProducto
+                handleEliminarProducto,
+                nombre,
+                setNombre,
+                colocarOrden,
+                total
             }}
         >
             {children}
